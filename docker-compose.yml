@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: "cra-api"
+    image: python:3.10-slim-buster
+    env_file: .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/api
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      - localstack
+
+  localstack:
+    container_name: "${LOCALSTACK_CONTAINER_NAME:-cra-localstack}"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "localstack_data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  localstack_data:
