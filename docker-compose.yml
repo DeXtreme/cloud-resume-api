@@ -2,14 +2,13 @@ version: "3.8"
 
 services:
   api:
+    build: .
     container_name: "cra-api"
-    image: python:3.10-slim-buster
     env_file: .env
     ports:
       - "8080:8080"
     volumes:
       - ./:/api
-    command: /bin/sh -c "while sleep 1000; do :; done"
     depends_on:
       - localstack
 
